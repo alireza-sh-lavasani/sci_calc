@@ -18,6 +18,7 @@ import {
   TextField,
   Fab,
   Popover,
+  MenuItem,
 } from '@material-ui/core'
 import { useEffect, useState } from 'react'
 import localForage from 'localforage'
@@ -46,6 +47,8 @@ const DataForm = ({ tabName }) => {
   const [NegCtrls, setNegCtrls] = useState([0, 0, 0])
   const [Params, setParams] = useState([{ name: '', values: [0, 0, 0] }])
   const [anchorEl, setAnchorEl] = useState(null)
+
+  console.log({ Oxid, Reduced })
 
   const handleClick = event => {
     setAnchorEl(event.currentTarget)
@@ -158,6 +161,7 @@ const DataForm = ({ tabName }) => {
 
         <Grid cols={2}>
           <TextField
+            select
             value={Oxid}
             onChange={async ({ target: { value } }) => {
               setOxid(value)
@@ -172,7 +176,15 @@ const DataForm = ({ tabName }) => {
             // defaultValue={Oxid || 0}
             placeholder={tabName == 'lower' ? '' : ''}
             fullWidth
-          />
+          >
+            <MenuItem key='540' value={47619}>
+              540
+            </MenuItem>
+
+            <MenuItem key='570' value={80586}>
+              570
+            </MenuItem>
+          </TextField>
 
           <TextField
             value={Reduced}
@@ -189,7 +201,16 @@ const DataForm = ({ tabName }) => {
             // defaultValue={Reduced || 0}
             placeholder={tabName == 'lower' ? '' : ''}
             fullWidth
-          />
+            select
+          >
+            <MenuItem key='540' value={104395}>
+              540
+            </MenuItem>
+
+            <MenuItem key='570' value={155677}>
+              570
+            </MenuItem>
+          </TextField>
         </Grid>
 
         <Spacer height='1.5em' />
