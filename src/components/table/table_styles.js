@@ -10,7 +10,7 @@ export const BaseCell = styled.div`
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  transition: all ease-in 0.1s;
+  transition: all ease-in 0.15s;
 
   b {
     margin-bottom: 0.1em;
@@ -31,10 +31,10 @@ export const DataCell = styled(BaseCell)`
   color: ${({ isSelected }) => (isSelected ? 'white' : '#38afff')};
   background-color: ${({ isSelected }) => (isSelected ? '#38afff' : 'white')};
 
-  &:hover {
+  /* &:hover {
     background-color: #d7efff;
     color: #38afff;
-  }
+  } */
 `
 
 export const HollowCell = styled(BaseCell)`
