@@ -10,9 +10,9 @@ import {
   Spacer,
 } from './waves_styles'
 
-/**
- * Add Input
- */
+/**************************************
+ ******** Add Input
+ *************************************/
 export const addInput = async ({ list, setList, listKeyName, localDbKey }) => {
   setList([...list, 0])
 
@@ -23,9 +23,27 @@ export const addInput = async ({ list, setList, listKeyName, localDbKey }) => {
   })
 }
 
-/**
- * Render Inputs
- */
+/**************************************
+ ******** Batch Add Input
+ *************************************/
+export const batchAddInput = async ({
+  newList,
+  setList,
+  listKeyName,
+  localDbKey,
+}) => {
+  setList(newList)
+
+  const localDB = await localForage.getItem(localDbKey)
+  await localForage.setItem(localDbKey, {
+    ...localDB,
+    [listKeyName]: newList,
+  })
+}
+
+/**************************************
+ ******** Render Inputs
+ *************************************/
 export const RenderInputs = ({ list, setList, listKeyName, localDbKey }) =>
   list.map((value, index) => (
     <InputWrapper key={index}>
@@ -68,9 +86,9 @@ export const RenderInputs = ({ list, setList, listKeyName, localDbKey }) =>
     </InputWrapper>
   ))
 
-/**
- * Render Params
- */
+/**************************************
+ ******** Render Params
+ *************************************/
 export const RenderParams = (
   { list, setList, listKeyName, localDbKey },
   index
@@ -197,9 +215,9 @@ export const RenderParams = (
   </InputsRow>
 )
 
-/**
- * Render Param Inputs
- */
+/**************************************
+ ******** Render Param Inputs
+ *************************************/
 const RenderParamInputs = ({
   listIndex,
   values,
@@ -256,9 +274,9 @@ const RenderParamInputs = ({
     </InputWrapper>
   ))
 
-/**
- * Add Param Input
- */
+/**************************************
+ ******** Add Param Input
+ *************************************/
 export const addParamInput = async ({
   listIndex,
   values,

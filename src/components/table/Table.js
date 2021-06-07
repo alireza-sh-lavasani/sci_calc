@@ -1,12 +1,25 @@
-import React, { useState } from 'react'
+import { Button } from '@material-ui/core'
+import React, { useEffect, useState } from 'react'
+import { batchAddInput } from '../waves/HandleInputs'
 import { Cell } from './tableAssets/tableAssets'
 import { Container, HollowCell, Row, TitleCell } from './table_styles'
 
-const Table = ({ data }) => {
+const Table = ({ data, currentFieldData, closeModal }) => {
   /**************************************
    ******** State
    *************************************/
   const [SelectedCells, setSelectedCells] = useState([])
+
+  /******************************************
+   ******** add selected cells to main form
+   ******************************************/
+  const addCellsToForm = () => {
+    const { type, data } = currentFieldData
+    if (type == 'input')
+      batchAddInput({ ...data, newList: SelectedCells.map(({ data }) => data) })
+
+    closeModal()
+  }
 
   /**************************************
    ******** render
@@ -14,6 +27,17 @@ const Table = ({ data }) => {
   return (
     <>
       <Container>
+        {SelectedCells.length > 0 && (
+          <Button
+            variant='contained'
+            color='primary'
+            onClick={addCellsToForm}
+            style={{ marginBottom: '2em' }}
+          >
+            Add Cells
+          </Button>
+        )}
+
         {data.map((row, rowIndex) => (
           <Row key={rowIndex}>
             {row.map(({ id, data }, cellIndex) => {

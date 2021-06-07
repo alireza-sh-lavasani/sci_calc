@@ -37,7 +37,7 @@ import DataTableModal from '../table/DataTableModal'
 /**
  * Data form
  */
-const DataForm = ({ tabName }) => {
+const DataForm = ({ tabName, setIsFirstTime }) => {
   /**************************************
    ******** State
    *************************************/
@@ -48,13 +48,11 @@ const DataForm = ({ tabName }) => {
   const [PosCtrls, setPosCtrls] = useState([])
   const [NegCtrls, setNegCtrls] = useState([])
   const [Params, setParams] = useState([{ name: '', values: [] }])
-  // const [PosCtrls, setPosCtrls] = useState([0, 0, 0])
-  // const [NegCtrls, setNegCtrls] = useState([0, 0, 0])
-  // const [Params, setParams] = useState([{ name: '', values: [0, 0, 0] }])
   const [anchorEl, setAnchorEl] = useState(null)
   const [IsDataTableOpen, setIsDataTableOpen] = useState(false)
   const [ExcelData, setExcelData] = useState([])
   const [ReadFromExcel, setReadFromExcel] = useState(false)
+  const [CurrentFieldData, setCurrentFieldData] = useState()
 
   /**************************************
    ******** Handle Click
@@ -175,8 +173,10 @@ const DataForm = ({ tabName }) => {
                 color='secondary'
                 size='small'
                 onClick={async () => {
-                  await localForage.setItem(tabName, null)
-                  window.location.reload()
+                  // await localForage.setItem(tabName, null)
+                  await localForage.clear()
+                  setIsFirstTime(false)
+                  window.location.href = '/ablue'
                 }}
               >
                 CLEAR
@@ -326,14 +326,26 @@ const DataForm = ({ tabName }) => {
                   size='small'
                   color='primary'
                   aria-label='add'
-                  onClick={() =>
-                    addInput({
-                      list: NegCtrls,
-                      setList: setNegCtrls,
-                      listKeyName: 'negCtrls',
-                      localDbKey: { tabName },
-                    })
-                  }
+                  onClick={() => {
+                    if (ReadFromExcel) {
+                      setCurrentFieldData({
+                        type: 'input',
+                        data: {
+                          setList: setNegCtrls,
+                          listKeyName: 'negCtrls',
+                          localDbKey: { tabName },
+                        },
+                      })
+
+                      openDataTable()
+                    } else
+                      addInput({
+                        list: NegCtrls,
+                        setList: setNegCtrls,
+                        listKeyName: 'negCtrls',
+                        localDbKey: { tabName },
+                      })
+                  }}
                 >
                   <Add />
                 </Fab>
@@ -392,11 +404,14 @@ const DataForm = ({ tabName }) => {
         </form>
       </Container>
 
-      <DataTableModal
-        open={true}
-        handleClose={closeDataTable}
-        data={ExcelData}
-      />
+      {ReadFromExcel && (
+        <DataTableModal
+          open={IsDataTableOpen}
+          handleClose={closeDataTable}
+          data={ExcelData}
+          currentFieldData={CurrentFieldData}
+        />
+      )}
     </>
   )
 }

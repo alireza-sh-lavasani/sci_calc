@@ -13,7 +13,7 @@ import Table from './Table'
 /**************************************
  ******** Data Table Modal
  *************************************/
-const DataTableModal = ({ open, handleClose }) => {
+const DataTableModal = ({ open, handleClose, data, currentFieldData }) => {
   const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction='up' ref={ref} {...props} />
   })
@@ -44,7 +44,7 @@ const DataTableModal = ({ open, handleClose }) => {
         </Toolbar>
       </AppBar>
 
-      <Table />
+      <Table data={data} currentFieldData={currentFieldData} closeModal={handleClose} />
     </Dialog>
   )
 }

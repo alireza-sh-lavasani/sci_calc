@@ -38,7 +38,7 @@ const Colorimetric = () => {
   const [Loading, setLoading] = useState(true)
   const [Results, setResults] = useState([])
   const [Headers, setHeaders] = useState([])
-  const [IsFirstTime, setIsFirstTime] = useState()
+  const [IsFirstTime, setIsFirstTime] = useState(true)
 
   /**************************************
    ******** Mount
@@ -91,7 +91,7 @@ const Colorimetric = () => {
         <Value>{value}</Value>
       </ResultRow>
     ))
-
+  console.log({ IsFirstTime })
   /**************************************
    ******** Loading
    *************************************/
@@ -138,7 +138,7 @@ const Colorimetric = () => {
           </TabBar>
 
           {/* <RenderTabs /> */}
-          <DataForm tabName={TabName} />
+          <DataForm tabName={TabName} setIsFirstTime={setIsFirstTime} />
 
           <HR />
           <Subtitle>Calculations</Subtitle>
