@@ -2,7 +2,7 @@
   "short_name": "ABlue",
   "name": "Alamar Blue Calculator",
   "description": "A scientific calculator currently calculating the formulas for alamar blue test",
-  "scope": "/ablue",
+  "scope": "/",
   "icons": [
     {
       "src": "https://alfri.ir/ablue-logo.png",
@@ -16,7 +16,7 @@
       "purpose": "maskable any"
     }
   ],
-  "start_url": "/ablue",
+  "start_url": "/",
   "display": "standalone",
   "theme_color": "#38afff",
   "background_color": "#38afff",

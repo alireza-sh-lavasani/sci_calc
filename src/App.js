@@ -10,7 +10,7 @@ const App = () => (
   <BrowserRouter>
     <Suspense fallback={() => <LinearProgress />}>
       <Switch>
-        <Route exact path='/' component={Home} />
+        <Route exact path='/' component={ABlue} />
         <Route path='/ablue' component={ABlue} />
         <Route path='/sandbox' component={Sandbox} />
       </Switch>

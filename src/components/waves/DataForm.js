@@ -165,7 +165,7 @@ const DataForm = ({ tabName, setIsFirstTime }) => {
                   // await localForage.setItem(tabName, null)
                   await localForage.clear()
                   setIsFirstTime(false)
-                  window.location.href = '/ablue'
+                  window.location.href = '/'
                 }}
               >
                 CLEAR
