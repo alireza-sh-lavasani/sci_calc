@@ -1,11 +1,25 @@
 import styled from 'styled-components'
 
+export const Container = styled.div`
+  max-width: 70em;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  padding: 2em;
+
+  @media (max-width: 700px) {
+    padding: 1em;
+    width: 95%;
+    overflow-x: auto;
+  }
+`
+
 export const BaseCell = styled.div`
   font-size: 0.85em;
   border-radius: 10px;
   margin: 0.25em;
-  width: 5em;
-  height: 3em;
+  min-width: 5em;
+  min-height: 3em;
   display: flex;
   justify-content: center;
   align-items: center;

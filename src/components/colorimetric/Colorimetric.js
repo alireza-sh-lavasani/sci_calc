@@ -25,68 +25,65 @@ import { Button, CircularProgress, Fab } from '@material-ui/core'
 import { BlurLinearOutlined, BlurOn, FilterNone } from '@material-ui/icons'
 import { calcDiffer, calcReduction } from '../waves/Calculations'
 import { CSVLink } from 'react-csv'
+import ChooseMethod from '../chooseMethod/ChooseMethod'
 
 /**
  * Colorimetrics
  */
 const Colorimetric = () => {
-  /**
-   * States
-   */
+  /**************************************
+   ******** States
+   *************************************/
   const [TabName, setTabName] = useState('lower')
-  const [Loading, setLoading] = useState(false)
+  const [Loading, setLoading] = useState(true)
   const [Results, setResults] = useState([])
   const [Headers, setHeaders] = useState([])
+  const [IsFirstTime, setIsFirstTime] = useState()
 
-  /**
-   * Setting state values in indexedDB
-   */
+  /**************************************
+   ******** Mount
+   *************************************/
   useEffect(() => {
-    const setLocalData = async () => {
-      const lower = await localForage.getItem('lower')
-      const higher = await localForage.getItem('higher')
-
-      if (!lower) {
-        await localForage.setItem('lower', {
-          posCtrls: [0, 0, 0],
-          negCtrls: [0, 0, 0],
-          params: [{ name: '', values: [0, 0, 0] }],
-        })
-      }
-
-      if (!higher) {
-        await localForage.setItem('higher', {
-          posCtrls: [0, 0, 0],
-          negCtrls: [0, 0, 0],
-          params: [{ name: '', values: [0, 0, 0] }],
-        })
-      }
-
-      setLoading(false)
-    }
-
     setLocalData()
   }, [])
 
-  /**
-   * Render tabs
-   */
-  // const RenderTabs = () =>
-  //   TabName === 'lower' ? <DataForm /> : <HigherWaves />
+  /*********************************************
+   ********Setting state values in indexedDB
+   *********************************************/
+  const setLocalData = async () => {
+    const lower = await localForage.getItem('lower')
+    const higher = await localForage.getItem('higher')
+    const base = await localForage.getItem('base')
 
-  /**
-   * Render
-   */
-  if (Loading)
-    return (
-      <LoadingWrapper>
-        <CircularProgress />
-      </LoadingWrapper>
-    )
+    if (!base) {
+      await localForage.setItem('base', {
+        ...base,
+        isFirstTime: true,
+      })
+    } else if (base) setIsFirstTime(base.isFirstTime)
 
-  /**
-   * Render Results
-   */
+    if (!lower) {
+      await localForage.setItem('lower', {
+        posCtrls: [],
+        negCtrls: [],
+        params: [{ name: '', values: [] }],
+      })
+    }
+
+    if (!higher) {
+      await localForage.setItem('higher', {
+        posCtrls: [],
+        negCtrls: [],
+        params: [{ name: '', values: [] }],
+      })
+    }
+
+    setLoading(false)
+  }
+
+  /**************************************
+   ******** Render Results
+   *************************************/
   const RenderResults = () =>
     Results.map(({ name, value }) => (
       <ResultRow>
@@ -95,9 +92,24 @@ const Colorimetric = () => {
       </ResultRow>
     ))
 
-  /**
-   * Render
-   */
+  /**************************************
+   ******** Loading
+   *************************************/
+  if (Loading)
+    return (
+      <LoadingWrapper>
+        <CircularProgress />
+      </LoadingWrapper>
+    )
+
+  /**************************************
+   ******** First Time
+   *************************************/
+  if (IsFirstTime) return <ChooseMethod setIsFirstTime={setIsFirstTime} />
+
+  /**************************************
+   ******** Render
+   *************************************/
   return (
     <>
       <Container>
@@ -154,7 +166,6 @@ const Colorimetric = () => {
               size='small'
               color='primary'
               startIcon={<BlurLinearOutlined />}
-              // onClick={calcReduction}
               onClick={async () => {
                 const { headers, results } = await calcReduction()
                 setHeaders(headers)
