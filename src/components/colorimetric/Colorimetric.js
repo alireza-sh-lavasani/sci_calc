@@ -88,10 +88,10 @@ const Colorimetric = () => {
     Results.map(({ name, value }) => (
       <ResultRow>
         <Key>{name}:</Key>
-        <Value>{value}</Value>
+        <Value>{parseInt(value * 100) / 100}</Value>
       </ResultRow>
     ))
-  console.log({ IsFirstTime })
+
   /**************************************
    ******** Loading
    *************************************/

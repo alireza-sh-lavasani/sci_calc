@@ -91,6 +91,19 @@ const Table = ({ data, currentFieldData, closeModal }) => {
             })}
           </Row>
         ))}
+
+        <Button
+          variant='contained'
+          onClick={addCellsToForm}
+          style={{
+            marginTop: '2em',
+            backgroundColor: '#38afff',
+            color: 'white',
+            opacity: SelectedCells.length == 0 ? 0 : 1,
+          }}
+        >
+          Add Cells
+        </Button>
       </Container>
     </>
   )
