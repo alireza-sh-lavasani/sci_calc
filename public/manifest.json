@@ -1,25 +1,38 @@
 {
-  "short_name": "Alamar Blue",
+  "short_name": "ABlue",
   "name": "Alamar Blue Calculator",
+  "description": "A scientific calculator currently calculating the formulas for alamar blue test",
+  "scope": "/ablue",
   "icons": [
     {
-      "src": "favicon.ico",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
+      "src": "https://alfri.ir/ablue-logo.png",
+      "type": "image/png",
+      "sizes": "512x512 192x192"
     },
     {
-      "src": "logo192.png",
+      "src": "https://alfri.ir/ablue-logo.png",
       "type": "image/png",
-      "sizes": "192x192"
-    },
-    {
-      "src": "logo512.png",
-      "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "512x512 192x192",
+      "purpose": "maskable any"
     }
   ],
-  "start_url": ".",
+  "start_url": "/ablue",
   "display": "standalone",
   "theme_color": "#38afff",
-  "background_color": "#38afff"
+  "background_color": "#38afff",
+  "orientation": "portrait",
+  "screenshots": [
+    {
+      "src": "/screenshots_01.png",
+      "type": "image/png"
+    },
+    {
+      "src": "/screenshots_02.png",
+      "type": "image/png"
+    },
+    {
+      "src": "/screenshots_03.png",
+      "type": "image/png"
+    }
+  ]
 }
