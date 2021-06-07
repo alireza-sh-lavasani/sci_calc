@@ -1,15 +1,11 @@
 import {
   Container,
   Grid,
-  InputsRow,
   Col,
-  InputWrapper,
   Small,
   Spacer,
   Subtitle,
   LoadingWrapper,
-  RemoveField,
-  DeleteIcon,
   HR,
 } from './waves_styles'
 import {
@@ -22,14 +18,7 @@ import {
 } from '@material-ui/core'
 import { useEffect, useState } from 'react'
 import localForage from 'localforage'
-import {
-  Add,
-  BlurLinear,
-  BlurLinearOutlined,
-  BlurOn,
-  BlurOnOutlined,
-  DeleteForeverOutlined,
-} from '@material-ui/icons'
+import { Add, DeleteForeverOutlined } from '@material-ui/icons'
 import { addInput, RenderInputs, RenderParams } from './HandleInputs'
 import { Paragraph } from '../colorimetric/colorimetric_styles'
 import DataTableModal from '../table/DataTableModal'
@@ -104,7 +93,7 @@ const DataForm = ({ tabName, setIsFirstTime }) => {
 
       // oxid ? setOxid(oxid) : setOxid(0)
       // reduced ? setReduced(reduced) : setReduced(0)
-      if (oxid && reduced) setOxRdPair({ key, value: [oxid, reduced] })
+      oxid ? setOxRdPair({ key, value: [oxid, reduced] }) : setOxRdPair()
       posCtrls && setPosCtrls(posCtrls)
       negCtrls && setNegCtrls(negCtrls)
       params && setParams(params)
@@ -221,25 +210,25 @@ const DataForm = ({ tabName, setIsFirstTime }) => {
             fullWidth
           >
             <MenuItem
-              key='540'
+              key={tabName == 'lower' ? 1 : 3}
               value={
                 tabName == 'lower'
                   ? { key: 540, value: [47619, 104395] }
-                  : { key: 540, value: [0, 0] }
+                  : { key: 600, value: [117216, 14652] }
               }
             >
-              540
+              {tabName == 'lower' ? '540' : '600'}
             </MenuItem>
 
             <MenuItem
-              key='570'
+              key={tabName == 'lower' ? 2 : 4}
               value={
                 tabName == 'lower'
                   ? { key: 570, value: [80586, 155677] }
-                  : { key: 570, value: [0, 0] }
+                  : { key: 630, value: [34798, 5494] }
               }
             >
-              570
+              {tabName == 'lower' ? '570' : '630'}
             </MenuItem>
           </TextField>
 
@@ -324,8 +313,8 @@ const DataForm = ({ tabName, setIsFirstTime }) => {
 
                 <Fab
                   size='small'
-                  color='primary'
                   aria-label='add'
+                  style={{ background: '#38afff', color: 'white' }}
                   onClick={() => {
                     if (ReadFromExcel) {
                       setCurrentFieldData({
@@ -372,7 +361,7 @@ const DataForm = ({ tabName, setIsFirstTime }) => {
 
                 <Fab
                   size='small'
-                  color='primary'
+                  style={{ background: '#38afff', color: 'white' }}
                   aria-label='add'
                   onClick={() => {
                     if (ReadFromExcel) {
@@ -405,8 +394,8 @@ const DataForm = ({ tabName, setIsFirstTime }) => {
           <HR />
           <Subtitle>Experimental Parametrs</Subtitle>
           <Paragraph>
-            Use <b style={{ color: '#38afff' }}>+ Param</b> button to add more
-            parameters
+            Use <b style={{ color: '#38afff', color: 'white' }}>+ Param</b>{' '}
+            button to add more parameters
           </Paragraph>
 
           <RenderParams

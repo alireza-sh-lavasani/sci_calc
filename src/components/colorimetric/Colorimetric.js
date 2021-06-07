@@ -113,7 +113,12 @@ const Colorimetric = () => {
   return (
     <>
       <Container>
-        <Card>
+        <Card
+          style={{
+            backgroundColor: '#f2faff',
+            filter: TabName == 'lower' ? 'none' : 'hue-rotate(135deg)',
+          }}
+        >
           <Title>Alamar Blue Colorimetric Calculator</Title>
           <Paragraph>
             Use the two tabs below to input your data separated by lower
@@ -149,7 +154,7 @@ const Colorimetric = () => {
             <Fab
               variant='extended'
               size='small'
-              color='primary'
+              style={{ background: '#38afff', color: 'white' }}
               aria-label='add'
               onClick={async () => {
                 const { headers, results } = await calcDiffer()
@@ -164,7 +169,7 @@ const Colorimetric = () => {
             <Button
               variant='outlined'
               size='small'
-              color='primary'
+              style={{ color: '#38afff', border: '1px solid #74c7ff' }}
               startIcon={<BlurLinearOutlined />}
               onClick={async () => {
                 const { headers, results } = await calcReduction()

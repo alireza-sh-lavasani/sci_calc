@@ -9,17 +9,18 @@ import {
   Col,
   Spacer,
 } from './waves_styles'
+import { generate as makeId } from 'shortid'
 
 /**************************************
  ******** Add Input
  *************************************/
 export const addInput = async ({ list, setList, listKeyName, localDbKey }) => {
-  setList([...list, 0])
+  setList([...list, { id: makeId(), data: 0 }])
 
   const localDB = await localForage.getItem(localDbKey)
   await localForage.setItem(localDbKey, {
     ...localDB,
-    [listKeyName]: [...list, 0],
+    [listKeyName]: [...list, { id: makeId(), data: 0 }],
   })
 }
 
@@ -45,14 +46,14 @@ export const batchAddInput = async ({
  ******** Render Inputs
  *************************************/
 export const RenderInputs = ({ list, setList, listKeyName, localDbKey }) =>
-  list.map((value, index) => (
-    <InputWrapper key={index}>
+  list.map(({ id, data }, index) => (
+    <InputWrapper key={id}>
       <TextField
         name={`posCtrl_${index + 1}`}
-        value={list[index].data}
+        value={data}
         onChange={async ({ target: { value } }) => {
           let updatedList = [...list]
-          updatedList[index] = value
+          updatedList[index] = { id, data: value }
           setList(updatedList)
 
           const localDB = await localForage.getItem(localDbKey)
@@ -160,7 +161,7 @@ export const RenderParams = ({
 
         <Fab
           size='small'
-          color='primary'
+          style={{ background: '#38afff', color: 'white' }}
           aria-label='add'
           onClick={() => {
             if (readFromExcel) {
@@ -201,7 +202,7 @@ export const RenderParams = ({
       <Fab
         variant='extended'
         size='small'
-        color='primary'
+        style={{ background: '#38afff', color: 'white', marginRight: '2em' }}
         aria-label='add'
         onClick={async () => {
           setList([
@@ -224,9 +225,6 @@ export const RenderParams = ({
             ],
           })
         }}
-        style={{
-          marginRight: '2em',
-        }}
       >
         <Add />
         Param
@@ -246,13 +244,13 @@ const RenderParamInputs = ({
   listKeyName,
   localDbKey,
 }) =>
-  values.map((value, index) => (
+  values.map(({ id, data }, index) => (
     <InputWrapper key={index}>
       <TextField
-        value={value.data}
+        value={data}
         onChange={async ({ target: { value } }) => {
           let updatedValues = [...values]
-          updatedValues[index] = value
+          updatedValues[index] = { id, data: value }
 
           let updatedList = [...list]
           updatedList[listIndex].values = updatedValues
@@ -305,7 +303,7 @@ export const addParamInput = async ({
   listKeyName,
   localDbKey,
 }) => {
-  let updatedValues = [...values, 0]
+  let updatedValues = [...values, { id: makeId(), data: 0 }]
   let updatedList = [...list]
   updatedList[listIndex].values = updatedValues
 
