@@ -31,8 +31,7 @@ const ChooseMethod = ({ setIsFirstTime }) => {
           <Button
             variant='contained'
             component='label'
-            color='primary'
-            style={{ width: '13em' }}
+            style={{ width: '13em', backgroundColor: '#38afff', color: 'white' }}
           >
             <input
               type='file'

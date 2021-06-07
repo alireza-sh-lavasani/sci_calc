@@ -9,32 +9,51 @@ import {
   Col,
   Spacer,
 } from './waves_styles'
+import { generate as makeId } from 'shortid'
 
-/**
- * Add Input
- */
+/**************************************
+ ******** Add Input
+ *************************************/
 export const addInput = async ({ list, setList, listKeyName, localDbKey }) => {
-  setList([...list, 0])
+  setList([...list, { id: makeId(), data: 0 }])
 
   const localDB = await localForage.getItem(localDbKey)
   await localForage.setItem(localDbKey, {
     ...localDB,
-    [listKeyName]: [...list, 0],
+    [listKeyName]: [...list, { id: makeId(), data: 0 }],
   })
 }
 
-/**
- * Render Inputs
- */
+/**************************************
+ ******** Batch Add Input
+ *************************************/
+export const batchAddInput = async ({
+  newList,
+  setList,
+  listKeyName,
+  localDbKey,
+}) => {
+  setList(newList)
+
+  const localDB = await localForage.getItem(localDbKey)
+  await localForage.setItem(localDbKey, {
+    ...localDB,
+    [listKeyName]: newList,
+  })
+}
+
+/**************************************
+ ******** Render Inputs
+ *************************************/
 export const RenderInputs = ({ list, setList, listKeyName, localDbKey }) =>
-  list.map((value, index) => (
-    <InputWrapper key={index}>
+  list.map(({ id, data }, index) => (
+    <InputWrapper key={id}>
       <TextField
         name={`posCtrl_${index + 1}`}
-        value={list[index]}
+        value={data}
         onChange={async ({ target: { value } }) => {
           let updatedList = [...list]
-          updatedList[index] = value
+          updatedList[index] = { id, data: value }
           setList(updatedList)
 
           const localDB = await localForage.getItem(localDbKey)
@@ -68,13 +87,18 @@ export const RenderInputs = ({ list, setList, listKeyName, localDbKey }) =>
     </InputWrapper>
   ))
 
-/**
- * Render Params
- */
-export const RenderParams = (
-  { list, setList, listKeyName, localDbKey },
-  index
-) => (
+/**************************************
+ ******** Render Params
+ *************************************/
+export const RenderParams = ({
+  list,
+  setList,
+  listKeyName,
+  localDbKey,
+  readFromExcel,
+  setCurrentFieldData,
+  openDataTable,
+}) => (
   <InputsRow style={{ marginRight: '-1.5em' }}>
     {list.map(({ name, values }, index) => (
       <Col margin='0 0.85em' key={index}>
@@ -137,18 +161,33 @@ export const RenderParams = (
 
         <Fab
           size='small'
-          color='primary'
+          style={{ background: '#38afff', color: 'white' }}
           aria-label='add'
-          onClick={() =>
-            addParamInput({
-              listIndex: index,
-              values,
-              list,
-              setList,
-              listKeyName,
-              localDbKey,
-            })
-          }
+          onClick={() => {
+            if (readFromExcel) {
+              setCurrentFieldData({
+                type: 'param',
+                data: {
+                  selected: values,
+                  listIndex: index,
+                  list,
+                  setList,
+                  listKeyName,
+                  localDbKey,
+                },
+              })
+
+              openDataTable()
+            } else
+              addParamInput({
+                listIndex: index,
+                values,
+                list,
+                setList,
+                listKeyName,
+                localDbKey,
+              })
+          }}
         >
           <Add />
         </Fab>
@@ -163,14 +202,14 @@ export const RenderParams = (
       <Fab
         variant='extended'
         size='small'
-        color='primary'
+        style={{ background: '#38afff', color: 'white', marginRight: '2em' }}
         aria-label='add'
         onClick={async () => {
           setList([
             ...list,
             {
               name: '',
-              values: [0, 0, 0],
+              values: [],
             },
           ])
 
@@ -181,13 +220,10 @@ export const RenderParams = (
               ...list,
               {
                 name: '',
-                values: [0, 0, 0],
+                values: [],
               },
             ],
           })
-        }}
-        style={{
-          marginRight: '2em',
         }}
       >
         <Add />
@@ -197,9 +233,9 @@ export const RenderParams = (
   </InputsRow>
 )
 
-/**
- * Render Param Inputs
- */
+/**************************************
+ ******** Render Param Inputs
+ *************************************/
 const RenderParamInputs = ({
   listIndex,
   values,
@@ -208,13 +244,13 @@ const RenderParamInputs = ({
   listKeyName,
   localDbKey,
 }) =>
-  values.map((value, index) => (
+  values.map(({ id, data }, index) => (
     <InputWrapper key={index}>
       <TextField
-        value={value}
+        value={data}
         onChange={async ({ target: { value } }) => {
           let updatedValues = [...values]
-          updatedValues[index] = value
+          updatedValues[index] = { id, data: value }
 
           let updatedList = [...list]
           updatedList[listIndex].values = updatedValues
@@ -256,9 +292,9 @@ const RenderParamInputs = ({
     </InputWrapper>
   ))
 
-/**
- * Add Param Input
- */
+/**************************************
+ ******** Add Param Input
+ *************************************/
 export const addParamInput = async ({
   listIndex,
   values,
@@ -267,9 +303,32 @@ export const addParamInput = async ({
   listKeyName,
   localDbKey,
 }) => {
-  let updatedValues = [...values, 0]
+  let updatedValues = [...values, { id: makeId(), data: 0 }]
   let updatedList = [...list]
   updatedList[listIndex].values = updatedValues
+
+  setList(updatedList)
+
+  const localDB = await localForage.getItem(localDbKey)
+  await localForage.setItem(localDbKey, {
+    ...localDB,
+    [listKeyName]: updatedList,
+  })
+}
+
+/**************************************
+ ******** Batch Add Param Input
+ *************************************/
+export const batchAddParamInput = async ({
+  listIndex,
+  newValues,
+  list,
+  setList,
+  listKeyName,
+  localDbKey,
+}) => {
+  let updatedList = [...list]
+  updatedList[listIndex].values = newValues
 
   setList(updatedList)
 

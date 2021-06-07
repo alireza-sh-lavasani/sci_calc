@@ -38,7 +38,7 @@ const Colorimetric = () => {
   const [Loading, setLoading] = useState(true)
   const [Results, setResults] = useState([])
   const [Headers, setHeaders] = useState([])
-  const [IsFirstTime, setIsFirstTime] = useState()
+  const [IsFirstTime, setIsFirstTime] = useState(true)
 
   /**************************************
    ******** Mount
@@ -88,7 +88,7 @@ const Colorimetric = () => {
     Results.map(({ name, value }) => (
       <ResultRow>
         <Key>{name}:</Key>
-        <Value>{value}</Value>
+        <Value>{parseInt(value * 100) / 100}</Value>
       </ResultRow>
     ))
 
@@ -113,7 +113,12 @@ const Colorimetric = () => {
   return (
     <>
       <Container>
-        <Card>
+        <Card
+          style={{
+            backgroundColor: '#f2faff',
+            filter: TabName == 'lower' ? 'none' : 'hue-rotate(135deg)',
+          }}
+        >
           <Title>Alamar Blue Colorimetric Calculator</Title>
           <Paragraph>
             Use the two tabs below to input your data separated by lower
@@ -138,7 +143,7 @@ const Colorimetric = () => {
           </TabBar>
 
           {/* <RenderTabs /> */}
-          <DataForm tabName={TabName} />
+          <DataForm tabName={TabName} setIsFirstTime={setIsFirstTime} />
 
           <HR />
           <Subtitle>Calculations</Subtitle>
@@ -149,7 +154,7 @@ const Colorimetric = () => {
             <Fab
               variant='extended'
               size='small'
-              color='primary'
+              style={{ background: '#38afff', color: 'white' }}
               aria-label='add'
               onClick={async () => {
                 const { headers, results } = await calcDiffer()
@@ -164,7 +169,7 @@ const Colorimetric = () => {
             <Button
               variant='outlined'
               size='small'
-              color='primary'
+              style={{ color: '#38afff', border: '1px solid #74c7ff' }}
               startIcon={<BlurLinearOutlined />}
               onClick={async () => {
                 const { headers, results } = await calcReduction()

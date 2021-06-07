@@ -1,15 +1,11 @@
 import {
   Container,
   Grid,
-  InputsRow,
   Col,
-  InputWrapper,
   Small,
   Spacer,
   Subtitle,
   LoadingWrapper,
-  RemoveField,
-  DeleteIcon,
   HR,
 } from './waves_styles'
 import {
@@ -22,14 +18,7 @@ import {
 } from '@material-ui/core'
 import { useEffect, useState } from 'react'
 import localForage from 'localforage'
-import {
-  Add,
-  BlurLinear,
-  BlurLinearOutlined,
-  BlurOn,
-  BlurOnOutlined,
-  DeleteForeverOutlined,
-} from '@material-ui/icons'
+import { Add, DeleteForeverOutlined } from '@material-ui/icons'
 import { addInput, RenderInputs, RenderParams } from './HandleInputs'
 import { Paragraph } from '../colorimetric/colorimetric_styles'
 import DataTableModal from '../table/DataTableModal'
@@ -37,7 +26,7 @@ import DataTableModal from '../table/DataTableModal'
 /**
  * Data form
  */
-const DataForm = ({ tabName }) => {
+const DataForm = ({ tabName, setIsFirstTime }) => {
   /**************************************
    ******** State
    *************************************/
@@ -48,13 +37,11 @@ const DataForm = ({ tabName }) => {
   const [PosCtrls, setPosCtrls] = useState([])
   const [NegCtrls, setNegCtrls] = useState([])
   const [Params, setParams] = useState([{ name: '', values: [] }])
-  // const [PosCtrls, setPosCtrls] = useState([0, 0, 0])
-  // const [NegCtrls, setNegCtrls] = useState([0, 0, 0])
-  // const [Params, setParams] = useState([{ name: '', values: [0, 0, 0] }])
   const [anchorEl, setAnchorEl] = useState(null)
   const [IsDataTableOpen, setIsDataTableOpen] = useState(false)
   const [ExcelData, setExcelData] = useState([])
   const [ReadFromExcel, setReadFromExcel] = useState(false)
+  const [CurrentFieldData, setCurrentFieldData] = useState()
 
   /**************************************
    ******** Handle Click
@@ -106,7 +93,7 @@ const DataForm = ({ tabName }) => {
 
       // oxid ? setOxid(oxid) : setOxid(0)
       // reduced ? setReduced(reduced) : setReduced(0)
-      if (oxid && reduced) setOxRdPair({ key, value: [oxid, reduced] })
+      oxid ? setOxRdPair({ key, value: [oxid, reduced] }) : setOxRdPair()
       posCtrls && setPosCtrls(posCtrls)
       negCtrls && setNegCtrls(negCtrls)
       params && setParams(params)
@@ -175,8 +162,10 @@ const DataForm = ({ tabName }) => {
                 color='secondary'
                 size='small'
                 onClick={async () => {
-                  await localForage.setItem(tabName, null)
-                  window.location.reload()
+                  // await localForage.setItem(tabName, null)
+                  await localForage.clear()
+                  setIsFirstTime(false)
+                  window.location.href = '/ablue'
                 }}
               >
                 CLEAR
@@ -221,25 +210,25 @@ const DataForm = ({ tabName }) => {
             fullWidth
           >
             <MenuItem
-              key='540'
+              key={tabName == 'lower' ? 1 : 3}
               value={
                 tabName == 'lower'
                   ? { key: 540, value: [47619, 104395] }
-                  : { key: 540, value: [0, 0] }
+                  : { key: 600, value: [117216, 14652] }
               }
             >
-              540
+              {tabName == 'lower' ? '540' : '600'}
             </MenuItem>
 
             <MenuItem
-              key='570'
+              key={tabName == 'lower' ? 2 : 4}
               value={
                 tabName == 'lower'
                   ? { key: 570, value: [80586, 155677] }
-                  : { key: 570, value: [0, 0] }
+                  : { key: 630, value: [34798, 5494] }
               }
             >
-              570
+              {tabName == 'lower' ? '570' : '630'}
             </MenuItem>
           </TextField>
 
@@ -324,16 +313,29 @@ const DataForm = ({ tabName }) => {
 
                 <Fab
                   size='small'
-                  color='primary'
                   aria-label='add'
-                  onClick={() =>
-                    addInput({
-                      list: NegCtrls,
-                      setList: setNegCtrls,
-                      listKeyName: 'negCtrls',
-                      localDbKey: { tabName },
-                    })
-                  }
+                  style={{ background: '#38afff', color: 'white' }}
+                  onClick={() => {
+                    if (ReadFromExcel) {
+                      setCurrentFieldData({
+                        type: 'input',
+                        data: {
+                          selected: NegCtrls,
+                          setList: setNegCtrls,
+                          listKeyName: 'negCtrls',
+                          localDbKey: tabName,
+                        },
+                      })
+
+                      openDataTable()
+                    } else
+                      addInput({
+                        list: NegCtrls,
+                        setList: setNegCtrls,
+                        listKeyName: 'negCtrls',
+                        localDbKey: tabName,
+                      })
+                  }}
                 >
                   <Add />
                 </Fab>
@@ -359,16 +361,29 @@ const DataForm = ({ tabName }) => {
 
                 <Fab
                   size='small'
-                  color='primary'
+                  style={{ background: '#38afff', color: 'white' }}
                   aria-label='add'
-                  onClick={() =>
-                    addInput({
-                      list: PosCtrls,
-                      setList: setPosCtrls,
-                      listKeyName: 'posCtrls',
-                      localDbKey: { tabName },
-                    })
-                  }
+                  onClick={() => {
+                    if (ReadFromExcel) {
+                      setCurrentFieldData({
+                        type: 'input',
+                        data: {
+                          selected: PosCtrls,
+                          setList: setPosCtrls,
+                          listKeyName: 'posCtrls',
+                          localDbKey: tabName,
+                        },
+                      })
+
+                      openDataTable()
+                    } else
+                      addInput({
+                        list: PosCtrls,
+                        setList: setPosCtrls,
+                        listKeyName: 'posCtrls',
+                        localDbKey: tabName,
+                      })
+                  }}
                 >
                   <Add />
                 </Fab>
@@ -379,8 +394,8 @@ const DataForm = ({ tabName }) => {
           <HR />
           <Subtitle>Experimental Parametrs</Subtitle>
           <Paragraph>
-            Use <b style={{ color: '#38afff' }}>+ Param</b> button to add more
-            parameters
+            Use <b style={{ color: '#38afff', color: 'white' }}>+ Param</b>{' '}
+            button to add more parameters
           </Paragraph>
 
           <RenderParams
@@ -388,15 +403,21 @@ const DataForm = ({ tabName }) => {
             setList={setParams}
             listKeyName='params'
             localDbKey={tabName}
+            readFromExcel={ReadFromExcel}
+            setCurrentFieldData={setCurrentFieldData}
+            openDataTable={openDataTable}
           />
         </form>
       </Container>
 
-      <DataTableModal
-        open={true}
-        handleClose={closeDataTable}
-        data={ExcelData}
-      />
+      {ReadFromExcel && (
+        <DataTableModal
+          open={IsDataTableOpen}
+          handleClose={closeDataTable}
+          data={ExcelData}
+          currentFieldData={CurrentFieldData}
+        />
+      )}
     </>
   )
 }
