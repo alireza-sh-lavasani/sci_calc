@@ -1,11 +1,24 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { DataCell } from '../table_styles'
 
-export const Cell = ({ id, data, selectedCells, setSelectedCells }) => {
+export const Cell = ({
+  id,
+  data,
+  selectedCells,
+  setSelectedCells,
+  isSelected,
+}) => {
   /**************************************
    ******** State
    *************************************/
-  const [IsSelected, setIsSelected] = useState(false)
+  const [IsSelected, setIsSelected] = useState(isSelected)
+
+  /**************************************
+   ******** Watch isSelected
+   *************************************/
+  useEffect(() => {
+    setIsSelected(isSelected)
+  }, [isSelected])
 
   /**************************************
    ******** Render

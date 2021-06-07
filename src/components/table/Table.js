@@ -6,10 +6,20 @@ import { Cell } from './tableAssets/tableAssets'
 import { Container, HollowCell, Row, TitleCell } from './table_styles'
 
 const Table = ({ data, currentFieldData, closeModal }) => {
+  console.log('***', currentFieldData)
+
   /**************************************
    ******** State
    *************************************/
   const [SelectedCells, setSelectedCells] = useState([])
+
+  /**************************************
+   ******** Watch selected
+   *************************************/
+  useEffect(() => {
+    if (currentFieldData.data.selected)
+      setSelectedCells(currentFieldData.data.selected)
+  }, [currentFieldData.data.selected])
 
   /******************************************
    ******** add selected cells to main form
@@ -21,14 +31,14 @@ const Table = ({ data, currentFieldData, closeModal }) => {
       case 'input':
         batchAddInput({
           ...data,
-          newList: SelectedCells.map(({ data }) => data),
+          newList: SelectedCells,
         })
         break
 
       case 'param':
         batchAddParamInput({
           ...data,
-          newValues: SelectedCells.map(({ data }) => data),
+          newValues: SelectedCells,
         })
         break
     }
@@ -75,6 +85,7 @@ const Table = ({ data, currentFieldData, closeModal }) => {
                   selectedCells={SelectedCells}
                   setSelectedCells={setSelectedCells}
                   data={data}
+                  isSelected={SelectedCells.map(({ id }) => id).includes(id)}
                 />
               )
             })}

@@ -331,9 +331,10 @@ const DataForm = ({ tabName, setIsFirstTime }) => {
                       setCurrentFieldData({
                         type: 'input',
                         data: {
+                          selected: NegCtrls,
                           setList: setNegCtrls,
                           listKeyName: 'negCtrls',
-                          localDbKey: { tabName },
+                          localDbKey: tabName,
                         },
                       })
 
@@ -343,7 +344,7 @@ const DataForm = ({ tabName, setIsFirstTime }) => {
                         list: NegCtrls,
                         setList: setNegCtrls,
                         listKeyName: 'negCtrls',
-                        localDbKey: { tabName },
+                        localDbKey: tabName,
                       })
                   }}
                 >
@@ -378,9 +379,10 @@ const DataForm = ({ tabName, setIsFirstTime }) => {
                       setCurrentFieldData({
                         type: 'input',
                         data: {
+                          selected: PosCtrls,
                           setList: setPosCtrls,
                           listKeyName: 'posCtrls',
-                          localDbKey: { tabName },
+                          localDbKey: tabName,
                         },
                       })
 
@@ -390,7 +392,7 @@ const DataForm = ({ tabName, setIsFirstTime }) => {
                         list: PosCtrls,
                         setList: setPosCtrls,
                         listKeyName: 'posCtrls',
-                        localDbKey: { tabName },
+                        localDbKey: tabName,
                       })
                   }}
                 >

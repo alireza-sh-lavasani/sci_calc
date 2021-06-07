@@ -49,7 +49,7 @@ export const RenderInputs = ({ list, setList, listKeyName, localDbKey }) =>
     <InputWrapper key={index}>
       <TextField
         name={`posCtrl_${index + 1}`}
-        value={list[index]}
+        value={list[index].data}
         onChange={async ({ target: { value } }) => {
           let updatedList = [...list]
           updatedList[index] = value
@@ -167,6 +167,7 @@ export const RenderParams = ({
               setCurrentFieldData({
                 type: 'param',
                 data: {
+                  selected: values,
                   listIndex: index,
                   list,
                   setList,
@@ -248,7 +249,7 @@ const RenderParamInputs = ({
   values.map((value, index) => (
     <InputWrapper key={index}>
       <TextField
-        value={value}
+        value={value.data}
         onChange={async ({ target: { value } }) => {
           let updatedValues = [...values]
           updatedValues[index] = value
