@@ -13,40 +13,34 @@ import Table from './Table'
 /**************************************
  ******** Data Table Modal
  *************************************/
-const DataTableModal = ({ open, handleClose, data, currentFieldData }) => {
-  const Transition = React.forwardRef(function Transition(props, ref) {
-    return <Slide direction='up' ref={ref} {...props} />
-  })
+const DataTableModal = ({ open, handleClose, data, currentFieldData }) => (
+  <Dialog
+    fullScreen
+    open={open}
+    onClose={handleClose}
+    // TransitionComponent={Transition}
+  >
+    <AppBar style={{ position: 'relative' }}>
+      <Toolbar>
+        <IconButton
+          edge='start'
+          color='inherit'
+          onClick={handleClose}
+          aria-label='close'
+        >
+          <Close />
+        </IconButton>
 
-  return (
-    <Dialog
-      fullScreen
-      open={open}
-      onClose={handleClose}
-      TransitionComponent={Transition}
-    >
-      <AppBar style={{ position: 'relative' }}>
-        <Toolbar>
-          <IconButton
-            edge='start'
-            color='inherit'
-            onClick={handleClose}
-            aria-label='close'
-          >
-            <Close />
-          </IconButton>
+        <b>Excel Data Table</b>
+      </Toolbar>
+    </AppBar>
 
-          <b>Excel Data Table</b>
-
-          {/* <Button autoFocus color='secondary' onClick={handleClose}>
-            save
-          </Button> */}
-        </Toolbar>
-      </AppBar>
-
-      <Table data={data} currentFieldData={currentFieldData} closeModal={handleClose} />
-    </Dialog>
-  )
-}
+    <Table
+      data={data}
+      currentFieldData={currentFieldData}
+      closeModal={handleClose}
+    />
+  </Dialog>
+)
 
 export default DataTableModal

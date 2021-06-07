@@ -27,16 +27,18 @@ const Table = ({ data, currentFieldData, closeModal }) => {
   return (
     <>
       <Container>
-        {SelectedCells.length > 0 && (
-          <Button
-            variant='contained'
-            color='primary'
-            onClick={addCellsToForm}
-            style={{ marginBottom: '2em' }}
-          >
-            Add Cells
-          </Button>
-        )}
+        <Button
+          variant='contained'
+          onClick={addCellsToForm}
+          style={{
+            marginBottom: '2em',
+            backgroundColor: '#38afff',
+            color: 'white',
+            opacity: SelectedCells.length == 0 ? 0 : 1
+          }}
+        >
+          Add Cells
+        </Button>
 
         {data.map((row, rowIndex) => (
           <Row key={rowIndex}>
