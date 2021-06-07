@@ -1,6 +1,7 @@
+/* eslint-disable default-case */
 import { Button } from '@material-ui/core'
 import React, { useEffect, useState } from 'react'
-import { batchAddInput } from '../waves/HandleInputs'
+import { batchAddInput, batchAddParamInput } from '../waves/HandleInputs'
 import { Cell } from './tableAssets/tableAssets'
 import { Container, HollowCell, Row, TitleCell } from './table_styles'
 
@@ -15,8 +16,22 @@ const Table = ({ data, currentFieldData, closeModal }) => {
    ******************************************/
   const addCellsToForm = () => {
     const { type, data } = currentFieldData
-    if (type == 'input')
-      batchAddInput({ ...data, newList: SelectedCells.map(({ data }) => data) })
+
+    switch (type) {
+      case 'input':
+        batchAddInput({
+          ...data,
+          newList: SelectedCells.map(({ data }) => data),
+        })
+        break
+
+      case 'param':
+        batchAddParamInput({
+          ...data,
+          newValues: SelectedCells.map(({ data }) => data),
+        })
+        break
+    }
 
     closeModal()
   }
@@ -34,7 +49,7 @@ const Table = ({ data, currentFieldData, closeModal }) => {
             marginBottom: '2em',
             backgroundColor: '#38afff',
             color: 'white',
-            opacity: SelectedCells.length == 0 ? 0 : 1
+            opacity: SelectedCells.length == 0 ? 0 : 1,
           }}
         >
           Add Cells

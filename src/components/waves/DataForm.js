@@ -373,14 +373,26 @@ const DataForm = ({ tabName, setIsFirstTime }) => {
                   size='small'
                   color='primary'
                   aria-label='add'
-                  onClick={() =>
-                    addInput({
-                      list: PosCtrls,
-                      setList: setPosCtrls,
-                      listKeyName: 'posCtrls',
-                      localDbKey: { tabName },
-                    })
-                  }
+                  onClick={() => {
+                    if (ReadFromExcel) {
+                      setCurrentFieldData({
+                        type: 'input',
+                        data: {
+                          setList: setPosCtrls,
+                          listKeyName: 'posCtrls',
+                          localDbKey: { tabName },
+                        },
+                      })
+
+                      openDataTable()
+                    } else
+                      addInput({
+                        list: PosCtrls,
+                        setList: setPosCtrls,
+                        listKeyName: 'posCtrls',
+                        localDbKey: { tabName },
+                      })
+                  }}
                 >
                   <Add />
                 </Fab>
@@ -400,6 +412,9 @@ const DataForm = ({ tabName, setIsFirstTime }) => {
             setList={setParams}
             listKeyName='params'
             localDbKey={tabName}
+            readFromExcel={ReadFromExcel}
+            setCurrentFieldData={setCurrentFieldData}
+            openDataTable={openDataTable}
           />
         </form>
       </Container>

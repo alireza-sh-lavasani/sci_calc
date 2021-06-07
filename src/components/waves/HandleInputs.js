@@ -89,10 +89,15 @@ export const RenderInputs = ({ list, setList, listKeyName, localDbKey }) =>
 /**************************************
  ******** Render Params
  *************************************/
-export const RenderParams = (
-  { list, setList, listKeyName, localDbKey },
-  index
-) => (
+export const RenderParams = ({
+  list,
+  setList,
+  listKeyName,
+  localDbKey,
+  readFromExcel,
+  setCurrentFieldData,
+  openDataTable,
+}) => (
   <InputsRow style={{ marginRight: '-1.5em' }}>
     {list.map(({ name, values }, index) => (
       <Col margin='0 0.85em' key={index}>
@@ -157,16 +162,30 @@ export const RenderParams = (
           size='small'
           color='primary'
           aria-label='add'
-          onClick={() =>
-            addParamInput({
-              listIndex: index,
-              values,
-              list,
-              setList,
-              listKeyName,
-              localDbKey,
-            })
-          }
+          onClick={() => {
+            if (readFromExcel) {
+              setCurrentFieldData({
+                type: 'param',
+                data: {
+                  listIndex: index,
+                  list,
+                  setList,
+                  listKeyName,
+                  localDbKey,
+                },
+              })
+
+              openDataTable()
+            } else
+              addParamInput({
+                listIndex: index,
+                values,
+                list,
+                setList,
+                listKeyName,
+                localDbKey,
+              })
+          }}
         >
           <Add />
         </Fab>
@@ -188,7 +207,7 @@ export const RenderParams = (
             ...list,
             {
               name: '',
-              values: [0, 0, 0],
+              values: [],
             },
           ])
 
@@ -199,7 +218,7 @@ export const RenderParams = (
               ...list,
               {
                 name: '',
-                values: [0, 0, 0],
+                values: [],
               },
             ],
           })
@@ -288,6 +307,29 @@ export const addParamInput = async ({
   let updatedValues = [...values, 0]
   let updatedList = [...list]
   updatedList[listIndex].values = updatedValues
+
+  setList(updatedList)
+
+  const localDB = await localForage.getItem(localDbKey)
+  await localForage.setItem(localDbKey, {
+    ...localDB,
+    [listKeyName]: updatedList,
+  })
+}
+
+/**************************************
+ ******** Batch Add Param Input
+ *************************************/
+export const batchAddParamInput = async ({
+  listIndex,
+  newValues,
+  list,
+  setList,
+  listKeyName,
+  localDbKey,
+}) => {
+  let updatedList = [...list]
+  updatedList[listIndex].values = newValues
 
   setList(updatedList)
 
